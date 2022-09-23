@@ -1,6 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import './../css/App.css';
 import PlanetTable from './PlanetTable';
+
+
+// async function loadIntoTable(url, table) {
+//   const tableHead = table.query()
+// }
 
 function App() {
   return (

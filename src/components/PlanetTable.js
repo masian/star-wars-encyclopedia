@@ -1,27 +1,72 @@
-const planetsUrl = 'https://swapi.dev/api/planets/';
+import React from "react";
+import { ReactDOM } from "react";
 
-function PlanetTable() {
+const planetsUrl = 'https://swapi.dev/api/planets';
+
+function PlanetHeader(props) {
+  let counter = 0;
+  const headers = Object.keys(props.value[0] ?? {}).filter(x=> (x!=='residents' && x!=='films' && x!=='url'));
+  return headers.map((x) => {
+    ++counter;
+    return (
+      <th key={counter}>
+        {x.toUpperCase().replace('_', ' ')}
+      </th>
+    );
+  });
+};
+
+function PlanetRow(props) {
+  let counter = 0;
+  const planets = props.value;
+  return planets.map((v,k)=> {
+    return (
+      <tr>
+          <td>{v.name}</td>
+          <td>{v.rotation_period}</td>
+          <td>{v.orbital_period}</td>
+          <td>{v.diameter}</td>
+          <td>{v.climate}</td>
+          <td>{v.gravity}</td>
+          <td>{v.terrain}</td>
+          <td>{v.surface_water}</td>
+          <td>{v.population}</td>
+          <td>{v.created}</td>
+          <td>{v.edited}</td>
+      </tr>
+    )
+  })
+}
+
+class PlanetTable extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      planets: []
+    }
+  }
+
+  async componentDidMount() {
+    const response =  await fetch(planetsUrl);
+    const {results} =  await response.json();
+    this.setState({planets: results});
+  }
+
+  render() {
     return(
-        <table>
-          <tbody>
+        <table id="table">
+          <thead>
             <tr>
-              <th>Company</th>
-              <th>Contact</th>
-              <th>Country</th>
+              <PlanetHeader id="header"value={this.state.planets}/>
             </tr>
-            <tr>
-              <td>Alfreds Futterkiste</td>
-              <td>Maria Anders</td>
-              <td>Germany</td>
-            </tr>
-            <tr>
-              <td>Centro comercial Moctezuma</td>
-              <td>Francisco Chang</td>
-              <td>Mexico</td>
-            </tr>
+          </thead>
+          <tbody id="tbody">
+            <PlanetRow id="row" value={this.state.planets}></PlanetRow>
           </tbody>
         </table>
     );
+  }
 } 
 
 export default PlanetTable;
