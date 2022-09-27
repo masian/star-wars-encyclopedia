@@ -38,9 +38,9 @@ function PersonalInfo(props) {
               <div>Birth Year: {resident.birth_year}</div>
               <div>Gender: {resident.gender}</div>
               <div>Homeworld: {resident.homeworld}</div>
-              <div>Species: {resident.species}</div>
-              <div>Vehicles: {resident.vehicles}</div>
-              <div>Starships: {resident.starships}</div>
+              <div>Species: {resident.species ? resident.species.join(", ") : resident.species}</div>
+              <div>Vehicles: {resident.vehicles ? resident.vehicles.join(", ") : resident.vehicles}</div>
+              <div>Starships: {resident.starships ? resident.starships.join(", ") : resident.starships}</div>
             </CardContent>
           </Card>
         </Box>
