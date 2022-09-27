@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { CircularProgress } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import SearchBar from "material-ui-search-bar";
 import { Link } from "react-router-dom";
@@ -66,7 +67,8 @@ class PlanetTable extends React.Component {
       search: "",
       page: 1,
       next: "",
-      previous: ""
+      previous: "",
+      isLoading: true
     }
   }
 
@@ -89,7 +91,8 @@ class PlanetTable extends React.Component {
       page: 1,
       total: pages,
       next: next,
-      previous: previous
+      previous: previous,
+      isLoading: false
     });
   }
 
@@ -105,7 +108,8 @@ class PlanetTable extends React.Component {
       currentTableData: results,
       page: value,
       next: next,
-      previous: previous
+      previous: previous,
+      isLoading: false
     });
   }
   
@@ -114,31 +118,36 @@ class PlanetTable extends React.Component {
 
     return (
       <div className="center">
+        <div style={{display: 'flex', justifyContent: 'center'}}>
+            {this.state.isLoading && <CircularProgress/>}
+        </div>
+      {!this.state.isLoading &&
       <Paper>
-        <SearchBar className="search"
-          value={this.state.value}
-          onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
-          onRequestSearch={() => {          
-            this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
-          }}
-        />
-        <div className="table">
-          <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1500}}>
-            <Table aria-label="simple table" options={{search:true}}>
-              <TableHead>
-                <TableRow>
-                  <PlanetHeader className="header" value={this.state.currentTableData}></PlanetHeader>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <PlanetRow className="row" value={this.state.currentTableData}></PlanetRow>
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <Pagination class="center" page={this.page} count={this.state.total !== 0 ? this.state.total : 1} shape="rounded" onChange={this.handleChange}/>
-      </div>
-      </Paper>
-      
+        <div>
+          <SearchBar className="search"
+            value={this.state.value}
+            onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
+            onRequestSearch={() => {          
+              this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
+            }}
+          />
+          <div className="table">
+            <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1500}}>
+              <Table aria-label="simple table" options={{search:true}}>
+                <TableHead>
+                  <TableRow>
+                    <PlanetHeader className="header" value={this.state.currentTableData}></PlanetHeader>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  <PlanetRow className="row" value={this.state.currentTableData}></PlanetRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Pagination class="center" page={this.page} count={this.state.total !== 0 ? this.state.total : 1} shape="rounded" onChange={this.handleChange}/>}
+        </div>
+      </div>       
+      </Paper>}
     </div>
     );
   }

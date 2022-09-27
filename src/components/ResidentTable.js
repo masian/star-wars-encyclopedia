@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import './../css/PlanetTable.css';
@@ -66,6 +67,14 @@ function ResidentRow(props) {
   );
 }
 
+function NoResident(props) {
+    return(
+        <div class="center">
+            <h1>No Residents on {props.planet}</h1>
+        </div>
+    );
+}
+
 class ResidentTable extends React.Component {
 
   constructor(props) {
@@ -73,7 +82,8 @@ class ResidentTable extends React.Component {
     this.state = {
       planetId: this.props.params.id,
       planetName: "",
-      residents: []
+      residents: [],
+      isLoading: true
     }
   }
 
@@ -81,14 +91,13 @@ class ResidentTable extends React.Component {
     const response =  await fetch(swapiPlanetUrl + this.state.planetId);
     const result =  await response.json();
     const residentUrls = result.residents;
-    const residentsResponse = await Promise.all(residentUrls.map(async (x) => (
-                        await (await fetch(x)).json()
-                    )));
+    const residentsResponse = await Promise.all(residentUrls.map(async (x) => ((await fetch(x)).json())));
     this.setState({
         planets: result,
         planetName: result.name,
         residents: residentsResponse,
-        pageCount: 0
+        pageCount: 0,
+        isLoading: false
     });
   }
 
@@ -96,6 +105,9 @@ class ResidentTable extends React.Component {
     return (
     <Paper>
        <div class="center">
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+                {this.state.isLoading && <CircularProgress/>}
+            </div>
             <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
                 <TableHead>
@@ -104,19 +116,13 @@ class ResidentTable extends React.Component {
                 </TableRow>
                 </TableHead>
                 <TableBody>
-                    <ResidentRow id="row" planetName={this.state.planetName} value={this.state.residents}></ResidentRow>
+                    <ResidentRow id="row" planetId={this.state.planetId} planetName={this.state.planetName} value={this.state.residents}></ResidentRow>
                 </TableBody>
             </Table>
-            <ReactPaginate
-                breakLabel="..."
-                nextLabel="next >"
-                // onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                pageCount={this.state.pageCount}
-                previousLabel="< previous"
-                renderOnZeroPageCount={null}
-            />
             </TableContainer>
+            <div>
+                {!  this.state.isLoading && this.state.residents.length === 0 && <NoResident planet={this.state.planetName}/>}
+            </div>
         </div> 
     </Paper>
 

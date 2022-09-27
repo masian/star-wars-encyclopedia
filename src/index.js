@@ -10,7 +10,6 @@ import Planets from './routes/Planets';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Planets/>} />
@@ -18,7 +17,6 @@ root.render(
         <Route path="planets/:id/residents/:rid" element={<Resident/>}/>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

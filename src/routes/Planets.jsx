@@ -10,10 +10,10 @@ function Planets() {
       <div className="Planets">
         <StarWarsHeader/>
         <div>
-        <Breadcrumbs class="center" aria-label="breadcrumb">
-          <Typography color="textPrimary">Planets</Typography>
-        </Breadcrumbs>
-        <PlanetTable/>
+          <Breadcrumbs class="center" aria-label="breadcrumb">
+            <Typography color="textPrimary">Planets</Typography>
+          </Breadcrumbs>
+          <PlanetTable/>
         </div>
       </div>
     </main>
