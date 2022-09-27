@@ -1,3 +1,5 @@
+import './../css/StarWarsHeader.css';
+
 export default function StarWarsHeader() {
     return (
         <div className="starWarsHeader">

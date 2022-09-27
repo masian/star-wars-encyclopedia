@@ -2,6 +2,7 @@ import ResidentTable from '../components/ResidentTable';
 import { Link } from "react-router-dom";
 import StarWarsHeader from '../components/StarWarsHeader';
 import { Breadcrumbs, Typography } from '@material-ui/core';
+import "./../css/PlanetTable.css";
 
 
 export default function Residents() {
@@ -10,7 +11,7 @@ export default function Residents() {
         <div className="Residents">
             <StarWarsHeader/>
             <div>
-                <Breadcrumbs aria-label="breadcrumb">
+                <Breadcrumbs class="center" aria-label="breadcrumb">
                     <Link color="inherit" to="/">
                         Planets
                     </Link>

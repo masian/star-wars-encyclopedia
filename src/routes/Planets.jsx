@@ -2,11 +2,7 @@ import './../css/App.css';
 import PlanetTable from '../components/PlanetTable';
 import StarWarsHeader from '../components/StarWarsHeader';
 import { Breadcrumbs, Typography } from '@material-ui/core';
-
-
-// async function loadIntoTable(url, table) {
-//   const tableHead = table.query()
-// }
+import './../css/PlanetTable.css';
 
 function Planets() {
   return (
@@ -14,7 +10,7 @@ function Planets() {
       <div className="Planets">
         <StarWarsHeader/>
         <div>
-        <Breadcrumbs aria-label="breadcrumb">
+        <Breadcrumbs class="center" aria-label="breadcrumb">
           <Typography color="textPrimary">Planets</Typography>
         </Breadcrumbs>
         <PlanetTable/>

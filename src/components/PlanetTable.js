@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Pagination from '@mui/material/Pagination';
 import SearchBar from "material-ui-search-bar";
 import { Link } from "react-router-dom";
 import { maxWidth } from '@mui/system';
@@ -58,54 +59,92 @@ class PlanetTable extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
     this.state = {
       planets: [],
       currentTableData: [],
-      search: ""
+      search: "",
+      page: 1,
+      next: "",
+      previous: ""
     }
   }
 
   async componentDidMount() {
     const response =  await fetch(planetsUrl);
-    const {results} =  await response.json();
+    const {results, count, next, previous} =  await response.json();
+    let pages;
+    
+    if(count > 0 && count <= 10) {
+      pages = count;
+    }
+    else if(count >= 10) {
+      pages = count/10;
+    }
+
     this.setState({
       planets: results,
       search: "",
-      currentTableData: results
+      currentTableData: results,
+      page: 1,
+      total: pages,
+      next: next,
+      previous: previous
     });
   }
+
+  async handleChange(event, value) {
+    let response;
+    const url = this.state.next.substring(0, this.state.next.length -1) + value;  
+    response =  await fetch(url);
+
+    const {results, previous, next} =  await response.json();
+  
+    this.setState({
+      planets: results,
+      currentTableData: results,
+      page: value,
+      next: next,
+      previous: previous
+    });
+  }
+  
 
   render() {
 
     return (
-      <div id="total">
-    <Paper>
-      <SearchBar  id="search"
-        value={this.state.value}
-        onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
-        onRequestSearch={() => {          
-          this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
-        }}
-      />
-    <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1000}}>
-      <Table id="table" aria-label="simple table" options={{search:true}}>
-        <TableHead>
-          <TableRow>
-            <PlanetHeader id="header" value={this.state.currentTableData}></PlanetHeader>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <PlanetRow id="row" value={this.state.currentTableData}></PlanetRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </Paper>
+      <div className="center">
+      <Paper>
+        <SearchBar className="search"
+          value={this.state.value}
+          onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
+          onRequestSearch={() => {          
+            this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
+          }}
+        />
+        <div className="table">
+          <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1500}}>
+            <Table aria-label="simple table" options={{search:true}}>
+              <TableHead>
+                <TableRow>
+                  <PlanetHeader className="header" value={this.state.currentTableData}></PlanetHeader>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <PlanetRow className="row" value={this.state.currentTableData}></PlanetRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Pagination class="center" page={this.page} count={this.state.total !== 0 ? this.state.total : 1} shape="rounded" onChange={this.handleChange}/>
+      </div>
+      </Paper>
+      
     </div>
     );
   }
 } 
 
 function updatePlanets(search, planets) {
-  return search ? planets.filter(x=>x.name === search) : planets;
+  return search ? planets.filter(x=>x.name.toLowerCase().includes(search.toLowerCase())) : planets;
 }
 export default PlanetTable;

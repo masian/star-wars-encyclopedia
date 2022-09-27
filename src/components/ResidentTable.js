@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Link, useParams } from "react-router-dom";
+import ReactPaginate from 'react-paginate';
+import './../css/PlanetTable.css';
 
 const swapiPlanetUrl = 'https://swapi.dev/api/planets/';
 
@@ -48,7 +50,7 @@ function ResidentRow(props) {
         >
           <TableCell component="th" scope="v" align="right" >
             <nav style={{ paddingBottom: 'solid 1px', borderBottom: '1rem' }}>
-              <Link to="/:id">{v.name}</Link>
+              <Link to={"/planets/"+props.planetId+"/residents/"+v.url.substring(v.url.length-2, v.url.length-1)}>{v.name}</Link>
             </nav>
           </TableCell>
           <TableCell align="right">{v.height}</TableCell>
@@ -85,25 +87,37 @@ class ResidentTable extends React.Component {
     this.setState({
         planets: result,
         planetName: result.name,
-        residents: residentsResponse
+        residents: residentsResponse,
+        pageCount: 0
     });
   }
 
   render() {
     return (
     <Paper>
-        <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
-            <TableHead>
-            <TableRow>
-                <ResidentHeader id="header" value={this.state.residents}></ResidentHeader>
-            </TableRow>
-            </TableHead>
-            <TableBody>
-            <ResidentRow id="row" planetName={this.state.planetName} value={this.state.residents}></ResidentRow>
-            </TableBody>
-        </Table>
-        </TableContainer>
+       <div class="center">
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
+                <TableHead>
+                <TableRow>
+                    <ResidentHeader id="header" value={this.state.residents}></ResidentHeader>
+                </TableRow>
+                </TableHead>
+                <TableBody>
+                    <ResidentRow id="row" planetName={this.state.planetName} value={this.state.residents}></ResidentRow>
+                </TableBody>
+            </Table>
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                // onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={this.state.pageCount}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+            />
+            </TableContainer>
+        </div> 
     </Paper>
 
     );
