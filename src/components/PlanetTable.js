@@ -122,32 +122,32 @@ class PlanetTable extends React.Component {
             {this.state.isLoading && <CircularProgress/>}
         </div>
       {!this.state.isLoading &&
-      <Paper>
-        <div>
-          <SearchBar className="search"
-            value={this.state.value}
-            onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
-            onRequestSearch={() => {          
-              this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
-            }}
-          />
-          <div className="table">
-            <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1500}}>
-              <Table aria-label="simple table" options={{search:true}}>
-                <TableHead>
-                  <TableRow>
-                    <PlanetHeader className="header" value={this.state.currentTableData}></PlanetHeader>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  <PlanetRow className="row" value={this.state.currentTableData}></PlanetRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <Pagination class="center" page={this.page} count={this.state.total !== 0 ? this.state.total : 1} shape="rounded" onChange={this.handleChange}/>}
-        </div>
-      </div>       
-      </Paper>}
+        <Paper>
+          <div>
+            <SearchBar className="search"
+              value={this.state.value}
+              onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
+              onRequestSearch={() => {          
+                this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
+              }}
+            />
+            <div className="table">
+              <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1500}}>
+                <Table aria-label="simple table" options={{search:true}}>
+                  <TableHead>
+                    <TableRow>
+                      <PlanetHeader className="header" value={this.state.currentTableData}></PlanetHeader>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <PlanetRow className="row" value={this.state.currentTableData}></PlanetRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <Pagination class="center" page={this.page} count={this.state.total !== 0 ? this.state.total : 1} shape="rounded" onChange={this.handleChange}/>
+          </div>
+        </div>       
+        </Paper>}
     </div>
     );
   }
