@@ -6,11 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import SearchBar from "material-ui-search-bar";
 import { Link, useParams } from "react-router-dom";
 
 const swapiPlanetUrl = 'https://swapi.dev/api/planets/';
-const swapiPeopleUrl = 'https://swapi.dev/api/people/';
 
 /* This is a higher order component that 
 *  inject a special prop   to our component.
@@ -21,7 +19,7 @@ function withRouter(Component) {
       return <Component {...props} params={params} />
     }
     return ComponentWithRouter
-  }
+}
 
 function ResidentHeader(props) {
   let counter = 0;
@@ -40,6 +38,7 @@ function ResidentHeader(props) {
 function ResidentRow(props) {
   let counter = 0;
   const residents = props.value;
+  const planetName = props.planetName;
 
     return (
       residents.map((v, k) => (
@@ -47,11 +46,10 @@ function ResidentRow(props) {
           key={v.name}
           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-          <TableCell component="th" scope="v" >
-            {/* <nav style={{ paddingBottom: 'solid 1px', borderBottom: '1rem' }}>
-              <Link>{v.birth_year}</Link>
-            </nav> */}
-            {v.name}
+          <TableCell component="th" scope="v" align="right" >
+            <nav style={{ paddingBottom: 'solid 1px', borderBottom: '1rem' }}>
+              <Link to="/:id">{v.name}</Link>
+            </nav>
           </TableCell>
           <TableCell align="right">{v.height}</TableCell>
           <TableCell align="right">{v.mass}</TableCell>
@@ -60,7 +58,7 @@ function ResidentRow(props) {
           <TableCell align="right">{v.eye_color}</TableCell>
           <TableCell align="right">{v.birth_year}</TableCell>
           <TableCell align="right">{v.gender}</TableCell>
-          <TableCell align="right">{v.homeworld}</TableCell>
+          <TableCell align="right">{planetName}</TableCell>
         </TableRow>
       ))
   );
@@ -71,20 +69,22 @@ class ResidentTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      planet: this.props.params.id,
+      planetId: this.props.params.id,
+      planetName: "",
       residents: []
     }
   }
 
   async componentDidMount() {
-    const response =  await fetch(swapiPlanetUrl + this.state.planet);
-    const results =  await response.json();
-    const residentUrls = results.residents;
+    const response =  await fetch(swapiPlanetUrl + this.state.planetId);
+    const result =  await response.json();
+    const residentUrls = result.residents;
     const residentsResponse = await Promise.all(residentUrls.map(async (x) => (
                         await (await fetch(x)).json()
                     )));
     this.setState({
-        planets: results,
+        planets: result,
+        planetName: result.name,
         residents: residentsResponse
     });
   }
@@ -92,7 +92,6 @@ class ResidentTable extends React.Component {
   render() {
     return (
     <Paper>
-        {/* <h1>{this.state.planet}</h1> */}
         <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
             <TableHead>
@@ -101,7 +100,7 @@ class ResidentTable extends React.Component {
             </TableRow>
             </TableHead>
             <TableBody>
-            <ResidentRow id="row" value={this.state.residents}></ResidentRow>
+            <ResidentRow id="row" planetName={this.state.planetName} value={this.state.residents}></ResidentRow>
             </TableBody>
         </Table>
         </TableContainer>

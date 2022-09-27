@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './css/index.css';
 import reportWebVitals from './reportWebVitals';
 import Residents from './routes/Residents'
+import Resident from './routes/Resident'
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Planets from './routes/Planets';
@@ -14,6 +15,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Planets/>} />
         <Route path="/planets/:id/residents" element={<Residents/>}/>
+        <Route path="planets/:id/residents/:rid" element={<Resident/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

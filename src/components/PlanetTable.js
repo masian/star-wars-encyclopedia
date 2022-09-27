@@ -8,6 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import SearchBar from "material-ui-search-bar";
 import { Link } from "react-router-dom";
+import { maxWidth } from '@mui/system';
+import './../css/PlanetTable.css';
 
 const planetsUrl = 'https://swapi.dev/api/planets/';
 
@@ -76,16 +78,17 @@ class PlanetTable extends React.Component {
   render() {
 
     return (
+      <div id="total">
     <Paper>
-      <SearchBar
+      <SearchBar  id="search"
         value={this.state.value}
         onChange={(newValue) => this.setState({ search: newValue.toLowerCase() })}
         onRequestSearch={() => {          
           this.setState({currentTableData: updatePlanets(this.state.search, this.state.planets)})
         }}
       />
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
+    <TableContainer component={Paper} sx={{ minWidth: 650, maxWidth: 1000}}>
+      <Table id="table" aria-label="simple table" options={{search:true}}>
         <TableHead>
           <TableRow>
             <PlanetHeader id="header" value={this.state.currentTableData}></PlanetHeader>
@@ -97,7 +100,7 @@ class PlanetTable extends React.Component {
       </Table>
     </TableContainer>
     </Paper>
-
+    </div>
     );
   }
 } 

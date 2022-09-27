@@ -1,5 +1,7 @@
 import './../css/App.css';
 import PlanetTable from '../components/PlanetTable';
+import StarWarsHeader from '../components/StarWarsHeader';
+import { Breadcrumbs, Typography } from '@material-ui/core';
 
 
 // async function loadIntoTable(url, table) {
@@ -10,13 +12,12 @@ function Planets() {
   return (
     <main>
       <div className="Planets">
-        <header className="App-header">
-          <div>May The Force Be With You</div>
-        </header>
+        <StarWarsHeader/>
         <div>
-        </div>
-        <div>
-          <PlanetTable></PlanetTable>
+        <Breadcrumbs aria-label="breadcrumb">
+          <Typography color="textPrimary">Planets</Typography>
+        </Breadcrumbs>
+        <PlanetTable/>
         </div>
       </div>
     </main>
