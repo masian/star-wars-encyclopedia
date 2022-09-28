@@ -11,12 +11,6 @@ export default function Residents() {
         <div className="Residents">
             <StarWarsHeader/>
             <div>
-                <Breadcrumbs class="center" aria-label="breadcrumb">
-                    <Link color="inherit" to="/">
-                        Planets
-                    </Link>
-                    <Typography color="textPrimary">Residents</Typography>
-                </Breadcrumbs>
                 <ResidentTable id="residentTable"></ResidentTable>
             </div>
         </div>        

@@ -6,8 +6,7 @@ import Card from '@mui/material/Card';
 import { Breadcrumbs, CardContent, Typography } from '@mui/material';
 import { Link, useParams } from "react-router-dom";
 import './../css/PlanetTable.css';
-
-const swapiPeopleUrl = 'https://swapi.dev/api/people/';
+import config from './../resource/config.json';
 
 /* This is a higher order component that 
 *  inject a special prop   to our component.
@@ -54,13 +53,14 @@ class ResidentProfile extends React.Component {
     super(props);
     this.state = {
       planet: this.props.params.id,
+      planetName: this.props.params.pname,
       residentId: this.props.params.rid,
       resident: {}
     }
   }
 
   async componentDidMount() {
-    const response =  await fetch(swapiPeopleUrl + this.state.residentId);
+    const response =  await fetch(config.SWAPI_PEOPLE_URL + this.state.residentId);
     const resident =  await response.json();
     
     this.setState({
@@ -73,12 +73,12 @@ class ResidentProfile extends React.Component {
     <Paper>
         <Breadcrumbs class="center" aria-label="breadcrumb">
           <Link color="inherit" to="/">
-              Planets
+              All Planets
           </Link>
-          <Link color="inherit" to={"/planets/"+this.state.planet+"/residents"}>
-              Residents
+          <Link color="inherit" to={"/"+this.state.planetName+"/"+this.state.planet+"/residents"}>
+              {this.state.planetName}
           </Link>
-          <Typography color="textPrimary">Resident</Typography>
+          <Typography color="textPrimary">{this.state.resident.name}</Typography>
                     </Breadcrumbs>
         <PersonalInfo value={this.state.resident}/>
     </Paper>

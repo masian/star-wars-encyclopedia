@@ -9,9 +9,9 @@ import Paper from '@mui/material/Paper';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Link, useParams } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
+import { Breadcrumbs, Typography } from '@mui/material';
 import './../css/PlanetTable.css';
-
-const swapiPlanetUrl = 'https://swapi.dev/api/planets/';
+import config from './../resource/config.json';
 
 /* This is a higher order component that 
 *  inject a special prop   to our component.
@@ -51,7 +51,7 @@ function ResidentRow(props) {
         >
           <TableCell component="th" scope="v" align="right" >
             <nav style={{ paddingBottom: 'solid 1px', borderBottom: '1rem' }}>
-              <Link to={"/planets/"+props.planetId+"/residents/"+v.url.substring(v.url.length-2, v.url.length-1)}>{v.name}</Link>
+              <Link to={"/"+props.planetName+"/"+props.planetId+"/residents/"+v.url.substring(v.url.length-2, v.url.length-1)}>{v.name}</Link>
             </nav>
           </TableCell>
           <TableCell align="right">{v.height}</TableCell>
@@ -81,20 +81,19 @@ class ResidentTable extends React.Component {
     super(props);
     this.state = {
       planetId: this.props.params.id,
-      planetName: "",
+      planetName: this.props.params.pname,
       residents: [],
       isLoading: true
     }
   }
 
   async componentDidMount() {
-    const response =  await fetch(swapiPlanetUrl + this.state.planetId);
+    const response =  await fetch(config.SWAPI_PLANET_URL + this.state.planetId);
     const result =  await response.json();
     const residentUrls = result.residents;
     const residentsResponse = await Promise.all(residentUrls.map(async (x) => ((await fetch(x)).json())));
     this.setState({
         planets: result,
-        planetName: result.name,
         residents: residentsResponse,
         pageCount: 0,
         isLoading: false
@@ -105,6 +104,10 @@ class ResidentTable extends React.Component {
     return (
     <Paper>
        <div class="center">
+            <Breadcrumbs class="center" aria-label="breadcrumb">
+                <Link color="inherit" to="/">All Planets</Link>
+                <Typography color="textPrimary">{this.state.planetName}</Typography>
+            </Breadcrumbs>
             <div style={{display: 'flex', justifyContent: 'center'}}>
                 {this.state.isLoading && <CircularProgress/>}
             </div>
@@ -112,7 +115,7 @@ class ResidentTable extends React.Component {
             <Table sx={{ minWidth: 650 }} aria-label="simple table" options={{search:true}}>
                 <TableHead>
                 <TableRow>
-                    <ResidentHeader id="header" value={this.state.residents}></ResidentHeader>
+                    <ResidentHeader id="header" planetName={this.state.planetName} value={this.state.residents}></ResidentHeader>
                 </TableRow>
                 </TableHead>
                 <TableBody>

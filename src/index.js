@@ -13,8 +13,8 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Planets/>} />
-        <Route path="/planets/:id/residents" element={<Residents/>}/>
-        <Route path="planets/:id/residents/:rid" element={<Resident/>}/>
+        <Route path="/:pname/:id/residents" element={<Residents/>}/>
+        <Route path=":pname/:id/residents/:rid" element={<Resident/>}/>
       </Routes>
     </BrowserRouter>
 );

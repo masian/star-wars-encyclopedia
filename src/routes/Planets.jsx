@@ -11,7 +11,7 @@ function Planets() {
         <StarWarsHeader/>
         <div>
           <Breadcrumbs class="center" aria-label="breadcrumb">
-            <Typography color="textPrimary">Planets</Typography>
+            <Typography color="textPrimary">All Planets</Typography>
           </Breadcrumbs>
           <PlanetTable/>
         </div>

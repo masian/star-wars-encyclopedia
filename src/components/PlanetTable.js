@@ -12,8 +12,7 @@ import SearchBar from "material-ui-search-bar";
 import { Link } from "react-router-dom";
 import { maxWidth } from '@mui/system';
 import './../css/PlanetTable.css';
-
-const planetsUrl = 'https://swapi.dev/api/planets/';
+import config from './../resource/config.json';
 
 function PlanetHeader(props) {
   let counter = 0;
@@ -40,7 +39,7 @@ function PlanetRow(props) {
         >
           <TableCell component="th" scope="v" >
             <nav style={{ paddingBottom: 'solid 1px', borderBottom: '1rem' }}>
-              <Link to={"/planets/"+v.url.substring(v.url.length - 2, v.url.length-1)+ "/residents"}>{v.name}</Link>
+              <Link to={"/"+v.name+"/"+v.url.substring(v.url.length - 2, v.url.length-1)+ "/residents"}>{v.name}</Link>
             </nav>
           </TableCell>
           <TableCell align="right">{v.rotation_period}</TableCell>
@@ -73,7 +72,7 @@ class PlanetTable extends React.Component {
   }
 
   async componentDidMount() {
-    const response =  await fetch(planetsUrl);
+    const response =  await fetch(config.SWAPI_PLANET_URL);
     const {results, count, next, previous} =  await response.json();
     let pages;
     
